@@ -50,6 +50,8 @@ namespace ncore
             //          x_end   = min(x_begin + run-length, width)
             //          run_change = read_symbol(&run_change_reader);
             //          if (run_change == 1)
+            //             if tile counter at tile[x_begin / tile_width, y / tile_height] == 0: increment dirty count and set it to 1
+            //             else: increment dirty tile counter at tile[x_begin / tile_width, y / tile_height]
             //             run_length = x_end - x_begin;
             //             for r in run_length:
             //                 selector = read_symbol(&selector_reader);
