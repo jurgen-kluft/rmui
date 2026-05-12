@@ -1,6 +1,7 @@
 #include "rmui/c_display.h"
-#include "rmui/c_decode_frame.h"
+#include "cfenc/c_decoder.h"
 #include "rcore/c_system.h"
+#include "ccore/c_memory.h"
 
 namespace ncore
 {
@@ -14,8 +15,7 @@ namespace ncore
 
             // use PSRAM to allocate the framebuffers since they are quite large
             // the tile buffer is small enough to fit in regular RAM
-            display->m_fb[0] = (u16*)nsystem::alloc_psram(display_width * display_height * sizeof(u16));
-            display->m_fb[1] = (u16*)nsystem::alloc_psram(display_width * display_height * sizeof(u16));
+            display->m_fb = (u16*)nsystem::alloc_psram(display_width * display_height * sizeof(u16));
 
             display->m_tiles.m_tile_w     = tile_width;
             display->m_tiles.m_tile_h     = tile_height;
@@ -25,27 +25,6 @@ namespace ncore
             // clear tile array
             for (u16 i = 0; i < display->m_tiles.m_tile_count; ++i)
                 display->m_tiles.m_tile_array[i] = 0;
-        }
-
-        void render(display_t& display, const u8* frame_delta, u32 size)
-        {
-            // Here we uncompress the frame delta and update the back buffer accordingly,
-            // and mark the corresponding tiles as dirty in the tile buffer.
-            // The front buffer is our previous frame buffer, and the back buffer is the
-            // one we are building for the new frame.
-            encoded_frame_t* encoded = (encoded_frame_t*)frame_delta;
-            if (encoded->m_magic != 0x4645)  // 'FE' in ASCII
-                return;                      // invalid frame data
-
-            u16* previous_fb = display.m_fb[display.m_front];
-            u16* current_fb  = display.m_fb[1 - display.m_front];
-
-            decode_frame(encoded, previous_fb, current_fb);
-
-            // In display.m_tiles.m_tile_array, we have tracked which tiles are dirty based on the changes made to current_fb
-            // compared to previous_fb during decoding.
-            // With this information we can optimize the rendering process by only redrawing the tiles that have changed, instead
-            // of the entire framebuffer.
         }
 
         void render_to_display(const display_t& display)
@@ -69,6 +48,13 @@ namespace ncore
                         u16 y_end   = (y_start + display.m_tiles.m_tile_h < display.m_height) ? (y_start + display.m_tiles.m_tile_h) : display.m_height;
 
                         // TODO ====> Update this tile to the hardware display
+                        for (u16 y = y_start; y < y_end; ++y)
+                        {
+                                u16* span = display.m_fb + (y * display.m_width + x_start);
+                                u16* hwdisplay = nullptr;
+                                // copy to frame-buffer
+                                g_memcpy(hwdisplay, span, sizeof(u16) * (x_end - x_start));
+                        }
 
                         // After updating this tile to the display, we can clear dirty for this tile!
                         display.m_tiles.m_tile_array[tile_index] = 0;

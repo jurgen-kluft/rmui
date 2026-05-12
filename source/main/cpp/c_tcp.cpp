@@ -1,4 +1,3 @@
-#include "rmui/c_rmui.h"
 #include "rmui/c_tcp.h"
 
 namespace ncore
