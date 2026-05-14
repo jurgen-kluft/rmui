@@ -7,7 +7,7 @@ namespace ncore
 {
     namespace nmui
     {
-        void init(display_t* display, u16 display_width, u16 display_height, u8 tile_width, u8 tile_height)
+        void init(display_t* display, u16 display_width, u16 display_height)
         {
             display->m_width  = display_width;
             display->m_height = display_height;
