@@ -11,26 +11,23 @@ namespace ncore
     {
         struct display_t
         {
-            u16* m_fb;         // RGB565 pixel data for the framebuffer
-            u16  m_width;      // width of the framebuffer in pixels
-            u16  m_height;     // height of the framebuffer in pixels
-            u8   m_front;      // 0 or 1, indicating which framebuffer is currently being displayed
-            u8   m_reserved1;  // reserved for future use, should be set to 0
-            u16  m_reserved2;  // reserved for future use, should be set to 0
-
-            struct tiles_t
-            {
-                u16  m_tile_w;      // tile width in pixels
-                u16  m_tile_h;      // tile height in pixels
-                u16  m_tile_count;  // total number of tiles in the array
-                u16  m_reserverd;   // reserved for future use, should be set to 0
-                u16* m_tile_array;  // array[tile count horizontal, tile count vertical]
-            };
-            tiles_t m_tiles;  // tile information for the display
+            u16* m_fb;      // RGB565 pixel data for the framebuffer
+            u16  m_width;   // width of the framebuffer in pixels
+            u16  m_height;  // height of the framebuffer in pixels
         };
 
-        void init(display_t* display, u16 display_width, u16 display_height, u8 tile_width, u8 tile_height);
-        void swap(display_t& display);
+        struct tiles_t
+        {
+            const u8* m_tiles;         // 2D array of tile dirty bits
+            u8        m_tile_w;        // tile width in pixels
+            u8        m_tile_h;        // tile height in pixels
+            u8        m_tile_stride;   // number of bytes per row in the tile array
+            u8        m_tile_count_h;  // number of horizontal tiles
+            u8        m_tile_count_v;  // number of vertical tiles
+        };
+
+        void init(display_t* display, u16 display_width, u16 display_height);
+        void render(display_t& display, const tiles_t& tiles);
 
     }  // namespace nmui
 }  // namespace ncore
