@@ -1,5 +1,5 @@
-#ifndef __ARDUINO_REMOTE_UI_CLIENT_H__
-#define __ARDUINO_REMOTE_UI_CLIENT_H__
+#ifndef __RMUI_DISPLAY_H__
+#define __RMUI_DISPLAY_H__
 #include "rcore/c_target.h"
 #ifdef USE_PRAGMA_ONCE
     #pragma once
@@ -35,4 +35,4 @@ namespace ncore
     }  // namespace nmui
 }  // namespace ncore
 
-#endif  // __ARDUINO_REMOTE_UI_CLIENT_H__
+#endif  // __RMUI_DISPLAY_H__

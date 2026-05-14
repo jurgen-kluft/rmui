@@ -1,5 +1,5 @@
-#ifndef __ARDUINO_REMOTE_UI_INPUT_MSGS_H__
-#define __ARDUINO_REMOTE_UI_INPUT_MSGS_H__
+#ifndef __RMUI_INPUT_MSGS_H__
+#define __RMUI_INPUT_MSGS_H__
 #include "rcore/c_target.h"
 #ifdef USE_PRAGMA_ONCE
     #pragma once
@@ -81,4 +81,4 @@ namespace ncore
     }  // namespace nmui
 }  // namespace ncore
 
-#endif  // __ARDUINO_REMOTE_UI_INPUT_MSGS_H__
+#endif  // __RMUI_INPUT_MSGS_H__
